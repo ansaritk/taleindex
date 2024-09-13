@@ -10,10 +10,28 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+        .hero-bg {
+            background-image: url('https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        .features-bg {
+            background-image: url('https://images.unsplash.com/photo-1516414447565-b14be0adf13e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        .about-bg {
+            background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .contact-bg {
+            background-image: url('https://images.unsplash.com/photo-1516414447565-b14be0adf13e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
-    <header class="bg-white shadow-sm">
+    <header class="bg-white bg-opacity-90 shadow-sm fixed w-full z-10">
         <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
             <div class="flex items-center">
                 <svg class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -30,26 +48,28 @@
     </header>
 
     <main>
-        <section class="bg-blue-600 text-white py-20">
+        <section class="hero-bg text-white py-32 md:py-64">
             <div class="container mx-auto px-6 text-center">
-                <h1 class="text-4xl md:text-6xl font-bold mb-4">Unlock the Power of Storytelling with AI-Driven Insights</h1>
-                <p class="text-xl mb-8">Boost Your Marketing Campaigns with Predictive Storytelling Performance</p>
-                <a href="#" class="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold hover:bg-blue-100 transition duration-300">Get Started</a>
+                <div class="bg-black bg-opacity-50 p-8 rounded-lg inline-block">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4">Unlock the Power of Storytelling with AI-Driven Insights</h1>
+                    <p class="text-xl mb-8">Boost Your Marketing Campaigns with Predictive Storytelling Performance</p>
+                    <a href="#" class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700 transition duration-300">Get Started</a>
+                </div>
             </div>
         </section>
 
-        <section id="features" class="py-20">
+        <section id="features" class="features-bg py-20">
             <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center mb-8">What We Do</h2>
+                <h2 class="text-3xl font-bold text-center mb-8 text-white">What We Do</h2>
                 <div class="grid md:grid-cols-2 gap-8">
-                    <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="bg-white bg-opacity-90 p-6 rounded-lg shadow-md">
                         <svg class="h-12 w-12 text-blue-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
                         <h3 class="text-xl font-semibold mb-2">Predict Story Impact</h3>
                         <p class="text-gray-600">Our platform analyzes your story and predicts its performance, helping you fine-tune your content before it reaches the audience.</p>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="bg-white bg-opacity-90 p-6 rounded-lg shadow-md">
                         <svg class="h-12 w-12 text-blue-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                         </svg>
@@ -60,23 +80,25 @@
             </div>
         </section>
 
-        <section id="about" class="bg-gray-100 py-20">
+        <section id="about" class="about-bg py-20">
             <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center mb-8">About Tale Index</h2>
-                <p class="text-gray-600 text-center max-w-2xl mx-auto">At Tale Index, we help you craft marketing strategies that truly resonate with your audience. Our SaaS platform predicts how your story will perform in the consumer market before it's published. Using our unique storytelling index, you can measure and adjust your content to maximize impact.</p>
+                <h2 class="text-3xl font-bold text-center mb-8 text-white">About Tale Index</h2>
+                <p class="text-white text-center max-w-2xl mx-auto">At Tale Index, we help you craft marketing strategies that truly resonate with your audience. Our SaaS platform predicts how your story will perform in the consumer market before it's published. Using our unique storytelling index, you can measure and adjust your content to maximize impact.</p>
             </div>
         </section>
 
-        <section id="contact" class="py-20">
+        <section id="contact" class="contact-bg py-20">
             <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center mb-8">Ready to Transform Your Storytelling?</h2>
-                <form class="max-w-md mx-auto">
-                    <div class="mb-4">
-                        <label for="email" class="block text-gray-700 font-semibold mb-2">Email Address</label>
-                        <input type="email" id="email" name="email" placeholder="you@example.com" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                    </div>
-                    <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700 transition duration-300">Get Started</button>
-                </form>
+                <div class="bg-white bg-opacity-90 p-8 rounded-lg max-w-md mx-auto">
+                    <h2 class="text-3xl font-bold text-center mb-8">Ready to Transform Your Storytelling?</h2>
+                    <form>
+                        <div class="mb-4">
+                            <label for="email" class="block text-gray-700 font-semibold mb-2">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="you@example.com" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700 transition duration-300">Get Started</button>
+                    </form>
+                </div>
             </div>
         </section>
     </main>
