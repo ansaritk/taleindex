@@ -6,7 +6,6 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,  // Ensure your API key is stored in an environment variable
 });
 
-// POST request handler for analyzing marketing briefs and scripts
 export async function POST(req: NextRequest) {
   try {
     // Parse the incoming form data from the request
@@ -14,11 +13,12 @@ export async function POST(req: NextRequest) {
     const briefFile = formData.get('brief');
     const scriptFile = formData.get('script');
 
-    if (!briefFile || !scriptFile) {
-      return NextResponse.json({ error: 'Missing files' }, { status: 400 });
+    // Check if the form data contains files and they are instances of File
+    if (!(briefFile instanceof File) || !(scriptFile instanceof File)) {
+      return NextResponse.json({ error: 'Files are required' }, { status: 400 });
     }
 
-    // Extract text from files (assuming plain text for simplicity, adjust as needed)
+    // Read the file contents
     const briefText = await briefFile.text();
     const scriptText = await scriptFile.text();
 
