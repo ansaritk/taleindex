@@ -7,6 +7,7 @@ const openai = new OpenAI({
 });
 
 export async function POST(req: NextRequest) {
+  console.log("Received a POST request"); // Add logging to verify the request is being processed
   try {
     const formData = await req.formData();
     const briefFile = formData.get('brief');
