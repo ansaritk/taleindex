@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Configuration, OpenAIApi } from 'openai'
+import OpenAI from 'openai';
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,  // or provide your API key directly
+});
+
 const openai = new OpenAIApi(configuration)
 
 export async function POST(req: NextRequest) {
