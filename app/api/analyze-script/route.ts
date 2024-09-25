@@ -1,60 +1,54 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
+// Initialize the OpenAI client with your API key
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,  // or provide your API key directly
+  apiKey: process.env.OPENAI_API_KEY,  // Ensure your API key is stored in an environment variable
 });
 
-const openai = new OpenAIApi(configuration)
-
+// POST request handler for analyzing marketing briefs and scripts
 export async function POST(req: NextRequest) {
-  if (!configuration.apiKey) {
-    return NextResponse.json({ error: 'OpenAI API key not configured' }, { status: 500 })
-  }
-
   try {
-    const formData = await req.formData()
-    const brief = formData.get('brief') as File | null
-    const script = formData.get('script') as File | null
+    // Parse the incoming form data from the request
+    const formData = await req.formData();
+    const briefFile = formData.get('brief');
+    const scriptFile = formData.get('script');
 
-    if (!brief || !script) {
-      return NextResponse.json({ error: 'Both brief and script files are required' }, { status: 400 })
+    if (!briefFile || !scriptFile) {
+      return NextResponse.json({ error: 'Missing files' }, { status: 400 });
     }
 
-    const briefContent = await brief.text()
-    const scriptContent = await script.text()
+    // Extract text from files (assuming plain text for simplicity, adjust as needed)
+    const briefText = await briefFile.text();
+    const scriptText = await scriptFile.text();
 
-    const completion = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+    // Call OpenAI's API to analyze the marketing brief and script
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
       messages: [
-        { role: "system", content: "You are a marketing expert that analyzes marketing briefs and scripts." },
-        { role: "user", content: `Analyze the following marketing brief and script. Provide a brief analysis of each, an alignment score out of 10, and recommendations for improvement.
-
-Brief:
-${briefContent}
-
-Script:
-${scriptContent}
-
-Format your response as follows:
-Brief Analysis: [Your analysis here]
-Script Analysis: [Your analysis here]
-Alignment Score: [Score out of 10]
-Recommendations: [Your recommendations here]` }
+        { role: 'system', content: 'You are a marketing analysis assistant.' },
+        { role: 'user', content: `Analyze the following marketing brief:\n\n${briefText}` },
+        { role: 'user', content: `Analyze the following marketing script:\n\n${scriptText}` },
       ],
-    })
+    });
 
-    const analysisResult = completion.data.choices[0].message?.content?.trim() || 'Analysis failed'
-    const [briefAnalysis, scriptAnalysis, alignmentScore, recommendations] = analysisResult.split('\n\n').map(item => item.split(': ')[1])
+    // Extract the results from the response
+    const analysisResult = completion.choices[0].message?.content || 'No analysis result';
 
+    // Dummy alignment score and recommendations (replace with actual logic if needed)
+    const alignmentScore = Math.floor(Math.random() * 10) + 1;  // Random score between 1 and 10
+    const recommendations = 'Here are some recommendations based on the analysis...';
+
+    // Send the response back with the analysis result, score, and recommendations
     return NextResponse.json({
-      briefAnalysis,
-      scriptAnalysis,
-      alignmentScore,
-      recommendations,
-    })
-  } catch (error: any) {
-    console.error('Error:', error)
-    return NextResponse.json({ error: error.message || 'An error occurred during analysis' }, { status: 500 })
+      briefAnalysis: `Brief Analysis: ${analysisResult}`,
+      scriptAnalysis: `Script Analysis: ${analysisResult}`,
+      alignmentScore: alignmentScore,
+      recommendations: recommendations,
+    });
+
+  } catch (error) {
+    console.error('Error during the analysis process:', error);
+    return NextResponse.json({ error: 'An error occurred while processing your request.' }, { status: 500 });
   }
 }
