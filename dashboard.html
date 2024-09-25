@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaleIndex Dashboard - Evaluate Your Scripts</title>
+    <title>TaleIndex Dashboard - Analyze Your Marketing Brief and Script</title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -26,42 +27,42 @@
                 <span class="text-2xl font-bold text-gray-800">TaleIndex</span>
             </div>
             <div class="hidden md:flex items-center space-x-4">
-                <a href="index.html" class="text-gray-600 hover:text-blue-500">Home</a>
+                <a href="index.html#features" class="text-gray-600 hover:text-blue-500">Features</a>
+                <a href="index.html#about" class="text-gray-600 hover:text-blue-500">About</a>
+                <a href="index.html#contact" class="text-gray-600 hover:text-blue-500">Contact</a>
+                <a href="dashboard.html" class="bg-blue-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-blue-700 transition duration-300">Try Now</a>
             </div>
         </nav>
     </header>
 
     <main class="pt-20 min-h-screen bg-gray-100">
         <div class="container mx-auto px-6 py-8">
-            <h1 class="text-4xl font-bold text-center mb-2">Evaluate Your Scripts</h1>
+            <h1 class="text-4xl font-bold text-center mb-2">Analyze Your Marketing Brief and Script</h1>
             <p class="text-xl text-gray-600 text-center mb-8">
-                Upload your scripts to get detailed analysis and insights.
+                Upload your marketing brief and script to get detailed analysis and insights.
             </p>
 
             <div class="bg-white shadow-md rounded-lg p-6 mb-8">
-                <h2 class="text-2xl font-semibold mb-4">Upload File</h2>
-                <form id="uploadForm" class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
-                    <div class="flex-grow w-full md:w-auto">
-                        <label for="file" class="sr-only">Choose file</label>
-                        <input type="file" id="file" name="file" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <h2 class="text-2xl font-semibold mb-4">Upload Files</h2>
+                <form id="uploadForm" class="space-y-4">
+                    <div>
+                        <label for="brief" class="block text-sm font-medium text-gray-700 mb-1">Marketing Brief</label>
+                        <input type="file" id="brief" name="brief" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                     </div>
-                    <button type="submit" class="w-full md:w-auto bg-blue-600 text-white px-6 py-2 rounded-md font-semibold hover:bg-blue-700 transition duration-300">Evaluate</button>
+                    <div>
+                        <label for="script" class="block text-sm font-medium text-gray-700 mb-1">Marketing Script</label>
+                        <input type="file" id="script" name="script" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white px-6 py-2 rounded-md font-semibold hover:bg-blue-700 transition duration-300">Analyze</button>
                 </form>
             </div>
 
-            <div id="results" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
+            <div id="results" class="space-y-6 hidden">
                 <div class="bg-white shadow-md rounded-lg p-6">
-                    <h2 class="text-2xl font-semibold mb-2">Word Count</h2>
-                    <p id="wordCount" class="text-4xl font-bold">-</p>
+                    <h2 class="text-2xl font-semibold mb-4">Analysis Results</h2>
+                    <div id="analysisResults" class="space-y-4"></div>
                 </div>
-                <div class="bg-white shadow-md rounded-lg p-6">
-                    <h2 class="text-2xl font-semibold mb-2">Readability Score</h2>
-                    <p id="readabilityScore" class="text-4xl font-bold">-</p>
-                </div>
-                <div class="bg-white shadow-md rounded-lg p-6 md:col-span-2">
-                    <h2 class="text-2xl font-semibold mb-2">Sentiment Analysis</h2>
-                    <p id="sentimentAnalysis" class="text-4xl font-bold">-</p>
-                </div>
+                <button id="downloadPdf" class="w-full bg-green-600 text-white px-6 py-2 rounded-md font-semibold hover:bg-green-700 transition duration-300">Download Report as PDF</button>
             </div>
         </div>
     </main>
@@ -89,12 +90,13 @@
             const formData = new FormData(this);
             const submitButton = this.querySelector('button[type="submit"]');
             const resultsDiv = document.getElementById('results');
+            const analysisResultsDiv = document.getElementById('analysisResults');
 
             submitButton.disabled = true;
-            submitButton.textContent = 'Evaluating...';
+            submitButton.textContent = 'Analyzing...';
 
             try {
-                const response = await fetch('/api/evaluate-script', {
+                const response = await fetch('/api/analyze-marketing', {
                     method: 'POST',
                     body: formData
                 });
@@ -104,17 +106,64 @@
                 }
 
                 const data = await response.json();
-                document.getElementById('wordCount').textContent = data.wordCount.toLocaleString();
-                document.getElementById('readabilityScore').textContent = data.readabilityScore.toFixed(1);
-                document.getElementById('sentimentAnalysis').textContent = data.sentimentAnalysis;
+                analysisResultsDiv.innerHTML = `
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2">Brief Analysis</h3>
+                        <p>${data.briefAnalysis}</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2">Script Analysis</h3>
+                        <p>${data.scriptAnalysis}</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2">Alignment Score</h3>
+                        <p>${data.alignmentScore}/10</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2">Recommendations</h3>
+                        <p>${data.recommendations}</p>
+                    </div>
+                `;
                 resultsDiv.classList.remove('hidden');
             } catch (error) {
                 console.error('Error:', error);
                 alert('An error occurred while processing your request. Please try again.');
             } finally {
                 submitButton.disabled = false;
-                submitButton.textContent = 'Evaluate';
+                submitButton.textContent = 'Analyze';
             }
+        });
+
+        document.getElementById('downloadPdf').addEventListener('click', function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const resultsDiv = document.getElementById('analysisResults');
+            
+            doc.setFontSize(18);
+            doc.text('Marketing Analysis Report', 20, 20);
+            
+            doc.setFontSize(12);
+            let yOffset = 40;
+            resultsDiv.querySelectorAll('div').forEach(div => {
+                const title = div.querySelector('h3').textContent;
+                const content = div.querySelector('p').textContent;
+                
+                doc.setFontSize(14);
+                doc.text(title, 20, yOffset);
+                yOffset += 10;
+                
+                doc.setFontSize(12);
+                const splitContent = doc.splitTextToSize(content, 170);
+                doc.text(splitContent, 20, yOffset);
+                yOffset += splitContent.length * 7 + 10;
+                
+                if (yOffset > 280) {
+                    doc.addPage();
+                    yOffset = 20;
+                }
+            });
+            
+            doc.save('marketing-analysis-report.pdf');
         });
     </script>
 </body>
