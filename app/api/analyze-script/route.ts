@@ -3,11 +3,12 @@ import OpenAI from 'openai';
 
 // Initialize the OpenAI client with your API key
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,  // Ensure the API key is set in your environment
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 export async function POST(req: NextRequest) {
-  console.log("Received a POST request"); // Log to verify the request is being processed
+  console.log("Received a POST request");
+
   try {
     // Ensure the content-type is multipart/form-data
     if (!req.headers.get('content-type')?.includes('multipart/form-data')) {
@@ -19,19 +20,19 @@ export async function POST(req: NextRequest) {
     const briefFile = formData.get('brief');
     const scriptFile = formData.get('script');
 
-    if (!(briefFile instanceof File) || !(scriptFile instanceof File)) {
+    // Handle file uploads using Buffer since File is not available in Node.js
+    if (!briefFile || !scriptFile || !(briefFile instanceof Blob) || !(scriptFile instanceof Blob)) {
       console.error("Missing or invalid files");
-      return NextResponse.json({ error: 'Files are required' }, { status: 400 });
+      return NextResponse.json({ error: 'Files are required and must be valid' }, { status: 400 });
     }
 
-    // Log file details for debugging
-    console.log("Brief File:", briefFile);
-    console.log("Script File:", scriptFile);
+    // Convert files to text or buffers
+    const briefBuffer = Buffer.from(await briefFile.arrayBuffer());
+    const scriptBuffer = Buffer.from(await scriptFile.arrayBuffer());
 
-    const briefText = await briefFile.text();
-    const scriptText = await scriptFile.text();
+    const briefText = briefBuffer.toString('utf-8');
+    const scriptText = scriptBuffer.toString('utf-8');
 
-    // Log the extracted file content
     console.log("Brief Text:", briefText);
     console.log("Script Text:", scriptText);
 
@@ -44,13 +45,6 @@ export async function POST(req: NextRequest) {
         { role: 'user', content: `Script: ${scriptText}` },
       ],
     });
-
-    // Log the response from OpenAI
-    console.log("OpenAI Response:", response);
-
-    if (!response.choices || response.choices.length === 0) {
-      throw new Error("Invalid response from OpenAI");
-    }
 
     const analysis = response.choices[0].message.content;
 
