@@ -94,7 +94,7 @@
             submitButton.textContent = 'Analyzing...';
 
             try {
-                const response = await fetch('/api/analyze-script', {
+                const response = await fetch('https://taleindex.me/api/analyze-script', {
                     method: 'POST',
                     body: formData
                 });
