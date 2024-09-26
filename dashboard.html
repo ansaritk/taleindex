@@ -37,6 +37,10 @@
             padding: 20px;
             flex: 1;
         }
+        .upload-form {
+            max-width: 50%; /* Restricting the width of the form to make it shorter */
+            margin: auto; /* Centering the form */
+        }
     </style>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -58,7 +62,7 @@
     <main class="pt-20 pb-12">
         <div class="max-w-4xl mx-auto px-4">
             <h1 class="text-3xl font-bold text-center mb-10">Upload Brief & Script for Analysis</h1>
-            <div class="bg-white p-6 rounded-lg shadow custom-shadow">
+            <div class="bg-white p-6 rounded-lg shadow custom-shadow upload-form">
                 <form id="uploadForm" class="space-y-6">
                     <div>
                         <label for="brief" class="text-sm font-medium text-gray-700">Upload Brief</label>
@@ -167,7 +171,7 @@
 
         document.getElementById('downloadPdf').addEventListener('click', function() {
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+            the doc = new jsPDF();
             doc.setFontSize(18);
             doc.text('Marketing Analysis Report', 20, 20);
             doc.setFontSize(12);
@@ -175,6 +179,6 @@
             doc.save('marketing-analysis-report.pdf');
         });
     });
-</script>
+    </script>
 </body>
 </html>
