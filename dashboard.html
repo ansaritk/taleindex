@@ -81,36 +81,44 @@
     </main>
 
     <script>
+        let sentimentChartInstance = null;
+        let metricsChartInstance = null;
+
         document.getElementById('analyzeBtn').addEventListener('click', async function(event) {
             event.preventDefault();
-
+    
             // Get files from input fields
             const briefFile = document.getElementById('brief').files[0];
             const scriptFile = document.getElementById('script').files[0];
-
+    
             // Create FormData to send the files
             const formData = new FormData();
             formData.append('brief', briefFile);
             formData.append('script', scriptFile);
-
+    
             try {
                 // Send POST request to /api/analyze-script
                 const response = await fetch('/api/analyze-script', {
                     method: 'POST',
                     body: formData,
                 });
-
+    
                 const data = await response.json();
                 
                 if (response.ok) {
                     document.getElementById('resultsSection').classList.remove('hidden');
-
+    
                     // Display overall score
                     document.getElementById('overallScore').innerText = `${data.alignmentScore}/10`;
-
+    
+                    // Destroy existing Sentiment Breakdown Chart if it exists
+                    if (sentimentChartInstance) {
+                        sentimentChartInstance.destroy();
+                    }
+    
                     // Render Sentiment Breakdown Chart
                     const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
-                    new Chart(sentimentCtx, {
+                    sentimentChartInstance = new Chart(sentimentCtx, {
                         type: 'radar',
                         data: {
                             labels: ['Positive', 'Negative', 'Neutral', 'Compound'],
@@ -123,10 +131,15 @@
                             }]
                         }
                     });
-
+    
+                    // Destroy existing Key Metrics Chart if it exists
+                    if (metricsChartInstance) {
+                        metricsChartInstance.destroy();
+                    }
+    
                     // Render Key Metrics Chart
                     const metricsCtx = document.getElementById('metricsChart').getContext('2d');
-                    new Chart(metricsCtx, {
+                    metricsChartInstance = new Chart(metricsCtx, {
                         type: 'radar',
                         data: {
                             labels: ['Clarity', 'Relevance', 'Engagement', 'Persuasiveness', 'Creativity', 'Consistency', 'Emotional Impact'],
@@ -142,13 +155,13 @@
                 } else {
                     alert(data.error || 'An error occurred during analysis.');
                 }
-
+    
             } catch (error) {
                 console.error('Error:', error);
                 alert('An error occurred while processing your request.');
             }
         });
-
+    
         // Download PDF Functionality
         document.getElementById('downloadPdf').addEventListener('click', function() {
             const { jsPDF } = window.jspdf;
