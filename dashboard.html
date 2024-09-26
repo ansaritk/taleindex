@@ -136,39 +136,40 @@
                             scales: {
                                 r: {
                                     angleLines: {
-                                        display: false // Hides the radial lines completely
+                                        display: true  // Display the radial lines
                                     },
                                     grid: {
-                                        display: false // Hides the grid lines for a clean look
+                                        display: true  // Display the grid lines for reference
                                     },
                                     ticks: {
-                                        display: true, // Shows the scale numbers along the axes
-                                        beginAtZero: true, // Ensures the scale starts from zero
-                                        stepSize: 1, // Sets the step size for scale, adjust based on your data range
-                                        maxTicksLimit: 5, // Limits the number of ticks to reduce clutter
-                                        backdropColor: 'transparent' // Ensures no background behind the ticks
+                                        display: true,  // Show the tick labels (the scale values)
+                                        beginAtZero: true,  // Start the scale at zero
+                                        stepSize: 1,  // Define the step size based on your data or preferences
+                                        maxTicksLimit: 5,  // Limit the number of tick labels to avoid clutter
+                                        color: '#666'  // Color for the tick labels, choose one that suits your design
                                     }
                                 }
                             },
                             elements: {
                                 line: {
-                                    borderWidth: 2 // Sets the line width connecting data points
+                                    borderWidth: 2  // Thickness of the line connecting data points
                                 },
                                 point: {
-                                    radius: 3 // Sets the size of the point markers
+                                    radius: 3  // Size of the point markers
                                 }
                             },
                             plugins: {
                                 legend: {
-                                    display: false // Hides the legend to simplify the chart
+                                    display: true  // Turn on the legend display
                                 },
                                 tooltip: {
-                                    enabled: false // Disables tooltips for simplicity
+                                    enabled: true  // Enable tooltips for interactive data point information
                                 }
                             },
-                            maintainAspectRatio: false, // Can be set to true if you need to maintain the aspect ratio
-                            responsive: true // Ensures the chart is responsive
+                            responsive: true,  // Ensure the chart is responsive
+                            maintainAspectRatio: false  // Set to false to allow custom sizing
                         }
+
                     });
 
                     if (metricsChartInstance) {
@@ -193,38 +194,38 @@
                             scales: {
                                 r: {
                                     angleLines: {
-                                        display: false // Hides the radial lines completely
+                                        display: true  // Display the radial lines
                                     },
                                     grid: {
-                                        display: false // Hides the grid lines for a clean look
+                                        display: true  // Display the grid lines for reference
                                     },
                                     ticks: {
-                                        display: true, // Shows the scale numbers along the axes
-                                        beginAtZero: true, // Ensures the scale starts from zero
-                                        stepSize: 1, // Sets the step size for scale, adjust based on your data range
-                                        maxTicksLimit: 5, // Limits the number of ticks to reduce clutter
-                                        backdropColor: 'transparent' // Ensures no background behind the ticks
+                                        display: true,  // Show the tick labels (the scale values)
+                                        beginAtZero: true,  // Start the scale at zero
+                                        stepSize: 1,  // Define the step size based on your data or preferences
+                                        maxTicksLimit: 5,  // Limit the number of tick labels to avoid clutter
+                                        color: '#666'  // Color for the tick labels, choose one that suits your design
                                     }
                                 }
                             },
                             elements: {
                                 line: {
-                                    borderWidth: 2 // Sets the line width connecting data points
+                                    borderWidth: 2  // Thickness of the line connecting data points
                                 },
                                 point: {
-                                    radius: 3 // Sets the size of the point markers
+                                    radius: 3  // Size of the point markers
                                 }
                             },
                             plugins: {
                                 legend: {
-                                    display: false // Hides the legend to simplify the chart
+                                    display: true  // Turn on the legend display
                                 },
                                 tooltip: {
-                                    enabled: false // Disables tooltips for simplicity
+                                    enabled: true  // Enable tooltips for interactive data point information
                                 }
                             },
-                            maintainAspectRatio: false, // Can be set to true if you need to maintain the aspect ratio
-                            responsive: true // Ensures the chart is responsive
+                            responsive: true,  // Ensure the chart is responsive
+                            maintainAspectRatio: false  // Set to false to allow custom sizing
                         }
                     });
                 } else {
