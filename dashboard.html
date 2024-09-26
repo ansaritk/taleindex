@@ -171,7 +171,7 @@
 
         document.getElementById('downloadPdf').addEventListener('click', function() {
             const { jsPDF } = window.jspdf;
-            the doc = new jsPDF();
+            const doc = new jsPDF();
             doc.setFontSize(18);
             doc.text('Marketing Analysis Report', 20, 20);
             doc.setFontSize(12);
