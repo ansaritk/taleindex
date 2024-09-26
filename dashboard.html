@@ -38,8 +38,8 @@
             flex: 1;
         }
         .upload-form {
-            max-width: 50%; /* Restricting the width of the form to make it shorter */
-            margin: auto; /* Centering the form */
+            max-width: 50%;
+            margin: auto;
         }
     </style>
     <!-- Chart.js CDN -->
@@ -75,107 +75,120 @@
                     <button type="submit" id="analyzeBtn" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Analyze</button>
                 </form>
             </div>
-            <div id="resultsSection" class="results-container custom-shadow hidden">
+            <section id="resultsSection" class="results-container custom-shadow hidden">
+                <h2 class="text-4xl font-bold text-center">Analysis Results</h2>
                 <div class="text-5xl font-bold text-blue-600" id="overallScore">10/10</div>
                 <div class="chart-container">
                     <div class="chart-box">
-                        <h2 class="text-2xl font-semibold mb-4">Sentiment Analysis</h2>
+                        <h3 class="text-2xl font-semibold mb-4">Sentiment Analysis</h3>
                         <canvas id="sentimentChart" class="mt-6"></canvas>
                     </div>
                     <div class="chart-box">
-                        <h2 class="text-2xl font-semibold mb-4">Key Metrics</h2>
+                        <h3 class="text-2xl font-semibold mb-4">Key Metrics</h3>
                         <canvas id="metricsChart" class="mt-6"></canvas>
                     </div>
                 </div>
                 <button id="downloadPdf" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700">Download Complete Report</button>
-            </div>
+            </section>
         </div>
     </main>
 
     <script>
     document.addEventListener('DOMContentLoaded', function () {
-    let sentimentChartInstance = null;
-    let metricsChartInstance = null;
+        let sentimentChartInstance = null;
+        let metricsChartInstance = null;
 
-    document.getElementById('analyzeBtn').addEventListener('click', async function(event) {
-        event.preventDefault();
-        const formData = new FormData(document.getElementById('uploadForm'));
+        document.getElementById('analyzeBtn').addEventListener('click', async function(event) {
+            event.preventDefault();
+            const formData = new FormData(document.getElementById('uploadForm'));
 
-        try {
-            const response = await fetch('/api/analyze-script', {
-                method: 'POST',
-                body: formData,
-            });
+            try {
+                const response = await fetch('/api/analyze-script', {
+                    method: 'POST',
+                    body: formData,
+                });
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (response.ok) {
-                document.getElementById('resultsSection').classList.remove('hidden');
-                document.getElementById('overallScore').innerText = `${data.alignmentScore}/10`;
+                if (response.ok) {
+                    document.getElementById('resultsSection').classList.remove('hidden');
+                    document.getElementById('overallScore').innerText = `${data.alignmentScore}/10`;
 
-                if (sentimentChartInstance) {
-                    sentimentChartInstance.destroy();
-                }
+                    if (sentimentChartInstance) {
+                        sentimentChartInstance.destroy();
+                    }
 
-                const sentimentData = data.sentimentBreakdown;
-                const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
-                sentimentChartInstance = new Chart(sentimentCtx, {
-                    type: 'radar',
-                    data: {
-                        labels: ['Positive', 'Negative', 'Neutral', 'Compound'].map((label, index) => `${label} (${sentimentData[label.toLowerCase()]})`),
-                        datasets: [{
-                            label: 'Sentiment Breakdown',
-                            data: [sentimentData.positive, sentimentData.negative, sentimentData.neutral, sentimentData.compound],
-                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            r: {
-                                ticks: {
-                                    display: false // Hide index
+                    const sentimentData = data.sentimentBreakdown;
+                    const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
+                    sentimentChartInstance = new Chart(sentimentCtx, {
+                        type: 'radar',
+                        data: {
+                            labels: ['Positive', 'Negative', 'Neutral', 'Compound'].map((label, index) => `${label} (${sentimentData[label.toLowerCase()]})`),
+                            datasets: [{
+                                label: 'Sentiment Breakdown',
+                                data: [sentimentData.positive, sentimentData.negative, sentimentData.neutral, sentimentData.compound],
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                r: {
+                                    angleLines: {
+                                        display: false
+                                    },
+                                    grid: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        display: false
+                                    }
                                 }
                             }
                         }
+                    });
+
+                    if (metricsChartInstance) {
+                        metricsChartInstance.destroy();
                     }
-                });
 
-                if (metricsChartInstance) {
-                    metricsChartInstance.destroy();
-                }
-
-                const metricsData = data.keyMetrics;
-                const metricsCtx = document.getElementById('metricsChart').getContext('2d');
-                metricsChartInstance = new Chart(metricsCtx, {
-                    type: 'radar',
-                    data: {
-                        labels: Object.keys(metricsData).map(key => `${key} (${metricsData[key]})`),
-                        datasets: [{
-                            label: 'Key Metrics Scores',
-                            data: Object.values(metricsData),
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            r: {
-                                ticks: {
-                                    display: false // Hide index
+                    const metricsData = data.keyMetrics;
+                    const metricsCtx = document.getElementById('metricsChart').getContext('2d');
+                    metricsChartInstance = new Chart(metricsCtx, {
+                        type: 'radar',
+                        data: {
+                            labels: Object.keys(metricsData).map(key => `${key} (${metricsData[key]})`),
+                            datasets: [{
+                                label: 'Key Metrics Scores',
+                                data: Object.values(metricsData),
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                r: {
+                                    angleLines: {
+                                        display: false
+                                    },
+                                    grid: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        display: false
+                                    }
                                 }
                             }
                         }
-                    }
-                });
-            } else {
-                alert(data.error || 'An error occurred during analysis.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while processing your request.');
+                    });
+                } else {
+                    alert(data.error || 'An error occurred during analysis.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while processing your request.');
             }
         });
 
