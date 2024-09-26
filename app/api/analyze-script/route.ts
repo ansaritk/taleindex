@@ -13,13 +13,13 @@ function generateRandomSentiment() {
 // Function to generate random values for key metrics
 function generateRandomKeyMetrics() {
   return {
-    clarity: Math.floor(Math.random() * 10) + 1,
-    relevance: Math.floor(Math.random() * 10) + 1,
-    engagement: Math.floor(Math.random() * 10) + 1,
-    persuasiveness: Math.floor(Math.random() * 10) + 1,
-    creativity: Math.floor(Math.random() * 10) + 1,
-    consistency: Math.floor(Math.random() * 10) + 1,
-    emotionalImpact: Math.floor(Math.random() * 10) + 1,
+    clarity: Math.floor(Math.random() * 6) + 5,
+    relevance: Math.floor(Math.random() * 6) + 5,
+    engagement: Math.floor(Math.random() * 6) + 5,
+    persuasiveness: Math.floor(Math.random() * 6) + 5,
+    creativity: Math.floor(Math.random() * 6) + 5,
+    consistency: Math.floor(Math.random() * 6) + 5,
+    emotionalImpact: Math.floor(Math.random() * 6) + 5,
   };
 }
 
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     // Generate random values for analysis
     const sentimentBreakdown = generateRandomSentiment();
     const keyMetrics = generateRandomKeyMetrics();
-    const alignmentScore = Math.floor(Math.random() * 10) + 1;
+    const alignmentScore = Math.floor(Math.random() * 6) + 5;
 
     // Return the analysis results
     return NextResponse.json({
