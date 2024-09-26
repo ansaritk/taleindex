@@ -41,6 +41,26 @@
             max-width: 50%;
             margin: auto;
         }
+        .score-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 10px 0;
+            margin-top: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            font-size: 24px;
+            font-weight: bold;
+            color: #2a4365; /* Navy blue */
+        }
+        
+        .score-box span {
+            margin-right: 10px;
+            font-size: 20px;
+            color: #718096; /* Gray */
+        }
         canvas {
             width: 400px !important;
             height: 400px !important;
@@ -81,7 +101,10 @@
             </div>
             <section id="resultsSection" class="results-container custom-shadow hidden">
                 <h2 class="text-4xl font-bold text-center">Analysis Results</h2>
-                <div class="text-5xl font-bold text-blue-600" id="overallScore">10/10</div>
+                <div class="score-box">
+                    <span>Overall Score:</span> <!-- Label for the score -->
+                    <div id="overallScore" class="text-5xl font-bold text-blue-600">10/10</div>
+                </div>
                 <div class="chart-container">
                     <div class="chart-box">
                         <h3 class="text-2xl font-semibold mb-4">Sentiment Analysis</h3>
