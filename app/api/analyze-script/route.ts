@@ -8,6 +8,7 @@ const openai = new OpenAI({
 
 export async function POST(req: NextRequest) {
   console.log("Received a POST request");
+  if (0) {
 
   try {
     // Ensure the content-type is multipart/form-data
@@ -59,5 +60,42 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Error during analysis:", error);
     return NextResponse.json({ error: 'An error occurred during analysis.', details: error.message }, { status: 500 });
+  }
+  }
+
+  try {
+    // Simulated analysis response with random values
+    const briefAnalysis = "Simulated brief analysis.";
+    const scriptAnalysis = "Simulated script analysis.";
+    const alignmentScore = Math.floor(Math.random() * 10) + 1;  // Random score between 1 and 10
+
+    // Generate random data for sentiment and metrics
+    const sentimentBreakdown = {
+      positive: Math.random() * 100,
+      negative: Math.random() * 100,
+      neutral: Math.random() * 100,
+      compound: Math.random() * 100,
+    };
+
+    const keyMetrics = {
+      clarity: Math.random() * 100,
+      relevance: Math.random() * 100,
+      engagement: Math.random() * 100,
+      persuasiveness: Math.random() * 100,
+      creativity: Math.random() * 100,
+      consistency: Math.random() * 100,
+      emotionalImpact: Math.random() * 100,
+    };
+
+    return NextResponse.json({
+      briefAnalysis,
+      scriptAnalysis,
+      alignmentScore,
+      sentimentBreakdown,
+      keyMetrics,
+    });
+
+  } catch (error) {
+    return NextResponse.json({ error: 'An error occurred during analysis.' }, { status: 500 });
   }
 }
