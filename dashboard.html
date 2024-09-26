@@ -9,59 +9,70 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .dashboard-bg {
-            background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-    </style>
+        body { font-family: 'Arial', sans-serif; }
+        .custom-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+     </style>
     <!-- Other head content -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-gray-100">
-    <header class="bg-white bg-opacity-90 shadow-sm fixed w-full z-10">
-        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <div class="flex items-center">
-                <img href="/"  src="assets/logo.png" alt="Tale Index Logo" class="h-8 w-auto mr-2">
-                <span href="/" class="text-2xl font-bold text-gray-800">TaleIndex</span>
-            </div>
+    <nav class="bg-white bg-opacity-90 shadow-sm fixed w-full z-10">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="/" class="flex items-center">
+                <img src="assets/logo.png" alt="Tale Index Logo" class="h-8 w-auto mr-2">
+                <span class="text-2xl font-bold text-gray-800">TaleIndex</span>
+            </a>
             <div class="hidden md:flex items-center space-x-4">
-                <a href="/" class="text-gray-600 hover:text-blue-500">Home</a>
+                <a href="/" class="text-gray-600 hover:text-blue-500 transition duration-300">Home</a>
                 <a href="dashboard.html" class="bg-blue-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-blue-700 transition duration-300">Try Now</a>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
 
-    <!-- MAIN CONTENT -->
-    <main class="pt-10">
-        <div class="container mx-auto px-6 py-8">
-            <h1 class="text-4xl font-bold text-center mb-4">Upload Brief & Script for Analysis</h1>
-
-            <!-- File Input for Brief and Script -->
-            <div class="bg-white p-8 shadow-md rounded-lg mb-8">
-                <form id="analysisForm">
-                    <div class="mb-4">
-                        <label for="brief" class="block text-lg font-semibold mb-2">Upload Brief</label>
-                        <input type="file" id="brief" class="w-full border border-gray-300 p-2 rounded-md" required>
+    <main class="pt-20 pb-10">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">Upload Brief & Script for Analysis</h1>
+            
+            <div class="bg-white p-8 custom-shadow rounded-lg mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="brief" class="block text-sm font-medium text-gray-700 mb-2">Upload Brief</label>
+                        <input type="file" id="brief" name="brief" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
-                    <div class="mb-4">
-                        <label for="script" class="block text-lg font-semibold mb-2">Upload Script</label>
-                        <input type="file" id="script" class="w-full border border-gray-300 p-2 rounded-md" required>
+                    <div>
+                        <label for="script" class="block text-sm font-medium text-gray-700 mb-2">Upload Script</label>
+                        <input type="file" id="script" name="script" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
-                    <button id="analyzeButton" class="w-full bg-blue-600 text-white px-6 py-2 rounded-md font-semibold hover:bg-blue-700 transition duration-300">Analyze</button>
-                </form>
+                </div>
+                <button id="analyzeBtn" class="mt-6 w-full bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700 transition duration-300">Analyze</button>
             </div>
 
-            <!-- Results Section -->
-            <div id="resultsSection" class="hidden bg-white p-8 shadow-md rounded-lg">
-                <h2 class="text-3xl font-semibold mb-4">Analysis Results</h2>
-
-                <!-- Overall Score -->
-                <div class="mb-8">
-                    <h3 class="text-2xl font-semibold mb-2">Overall Score</h3>
-                    <p id="overallScore" class="text-lg font-bold text-center"></p>
-                </div>
+            <div id="resultsSection" class="hidden bg-white p-8 custom-shadow rounded-lg">
+                <h2 class="text-3xl font-semibold mb-6 text-gray-800">Analysis Results</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-gray-50 p-6 rounded-lg custom-shadow">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-700">Overall Score</h3>
+                        <div class="text-5xl font-bold text-blue-600 mb-2">3/10</div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 30%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-lg custom-shadow">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-700">Sentiment Breakdown (VADER Analysis)</h3>
+                        <div class="aspect-square">
+                            <img src="/api/placeholder/300/300" alt="Sentiment Chart" class="w-full h-full object-contain">
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-lg custom-shadow">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-700">Key Metrics Scores</h3>
+                        <div class="aspect-square">
+                            <img src="/api/placeholder/300/300" alt="Metrics Chart" class="w-full h-full object-contain">
+                        </div>
+                    </div>
+               </div>
 
                 <!-- Sentiment Breakdown Chart -->
                 <div class="mb-8">
@@ -82,7 +93,7 @@
     </main>
 
     <script>
-        document.getElementById('analysisForm').addEventListener('submit', async function(event) {
+        document.getElementById('analyzeBtn').addEventListener('click', async function(event) {
             event.preventDefault();
 
             // Get files from input fields
