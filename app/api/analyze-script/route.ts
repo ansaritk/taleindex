@@ -1,98 +1,51 @@
 import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
 
-// Initialize the OpenAI client with your API key
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Function to generate random values for sentiment breakdown
+function generateRandomSentiment() {
+  return {
+    positive: Math.random().toFixed(2),
+    negative: Math.random().toFixed(2),
+    neutral: Math.random().toFixed(2),
+    compound: (Math.random() * 2 - 1).toFixed(2), // Compound value between -1 and 1
+  };
+}
+
+// Function to generate random values for key metrics
+function generateRandomKeyMetrics() {
+  return {
+    clarity: Math.floor(Math.random() * 10) + 1,
+    relevance: Math.floor(Math.random() * 10) + 1,
+    engagement: Math.floor(Math.random() * 10) + 1,
+    persuasiveness: Math.floor(Math.random() * 10) + 1,
+    creativity: Math.floor(Math.random() * 10) + 1,
+    consistency: Math.floor(Math.random() * 10) + 1,
+    emotionalImpact: Math.floor(Math.random() * 10) + 1,
+  };
+}
 
 export async function POST(req: NextRequest) {
   console.log("Received a POST request");
-  if (0) {
-
   try {
-    // Ensure the content-type is multipart/form-data
-    if (!req.headers.get('content-type')?.includes('multipart/form-data')) {
-      console.error("Invalid content type");
-      return NextResponse.json({ error: 'Content-Type must be multipart/form-data' }, { status: 400 });
-    }
-
+    // Simulate file input handling
     const formData = await req.formData();
     const briefFile = formData.get('brief');
     const scriptFile = formData.get('script');
 
-    // Handle file uploads using Buffer since File is not available in Node.js
-    if (!briefFile || !scriptFile || !(briefFile instanceof Blob) || !(scriptFile instanceof Blob)) {
-      console.error("Missing or invalid files");
-      return NextResponse.json({ error: 'Files are required and must be valid' }, { status: 400 });
+    // Ensure files are uploaded
+    if (!briefFile || !scriptFile) {
+      return NextResponse.json({ error: 'Files are required' }, { status: 400 });
     }
 
-    // Convert files to text or buffers
-    const briefBuffer = Buffer.from(await briefFile.arrayBuffer());
-    const scriptBuffer = Buffer.from(await scriptFile.arrayBuffer());
+    // Generate random values for analysis
+    const sentimentBreakdown = generateRandomSentiment();
+    const keyMetrics = generateRandomKeyMetrics();
+    const alignmentScore = Math.floor(Math.random() * 10) + 1;
 
-    const briefText = briefBuffer.toString('utf-8');
-    const scriptText = scriptBuffer.toString('utf-8');
-
-    console.log("Brief Text:", briefText);
-    console.log("Script Text:", scriptText);
-
-    // Call OpenAI API for analysis
-    const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [
-        { role: 'system', content: 'You are an AI that analyzes marketing briefs and scripts.' },
-        { role: 'user', content: `Brief: ${briefText}` },
-        { role: 'user', content: `Script: ${scriptText}` },
-      ],
-    });
-
-    const analysis = response.choices[0].message.content;
-
-    // Return analysis and additional info
+    // Return the analysis results
     return NextResponse.json({
-      briefAnalysis: `Brief Analysis: ${analysis}`,
-      scriptAnalysis: `Script Analysis: ${analysis}`,
-      alignmentScore: Math.floor(Math.random() * 10) + 1, // Mock alignment score
-      recommendations: 'Here are some recommendations based on the analysis.',
-    });
-
-  } catch (error) {
-    console.error("Error during analysis:", error);
-    return NextResponse.json({ error: 'An error occurred during analysis.', details: error.message }, { status: 500 });
-  }
-  }
-
-  try {
-    // Simulated analysis response with random values
-    const briefAnalysis = "Simulated brief analysis.";
-    const scriptAnalysis = "Simulated script analysis.";
-    const alignmentScore = Math.floor(Math.random() * 10) + 1;  // Random score between 1 and 10
-
-    // Generate random data for sentiment and metrics
-    const sentimentBreakdown = {
-      positive: Math.random() * 100,
-      negative: Math.random() * 100,
-      neutral: Math.random() * 100,
-      compound: Math.random() * 100,
-    };
-
-    const keyMetrics = {
-      clarity: Math.random() * 100,
-      relevance: Math.random() * 100,
-      engagement: Math.random() * 100,
-      persuasiveness: Math.random() * 100,
-      creativity: Math.random() * 100,
-      consistency: Math.random() * 100,
-      emotionalImpact: Math.random() * 100,
-    };
-
-    return NextResponse.json({
-      briefAnalysis,
-      scriptAnalysis,
-      alignmentScore,
       sentimentBreakdown,
       keyMetrics,
+      alignmentScore,
     });
 
   } catch (error) {
