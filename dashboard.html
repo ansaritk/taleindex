@@ -9,8 +9,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        body { font-family: 'Arial', sans-serif; }
-        .custom-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        body { 
+        font-family: 'Arial', sans-serif; 
+        }
+        .custom-shadow { 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+        }
+        .results-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .chart-container {
+            flex: 1; /* Makes each chart container take equal space */
+            margin: 10px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
      </style>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -45,16 +62,16 @@
                     <button type="submit" id="analyzeBtn" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Analyze</button>
                 </form>
             </div>
-
-            <div id="resultsSection" class="mt-10 bg-white p-6 rounded-lg shadow hidden">
-                <h2 class="text-2xl font-semibold mb-4">Analysis Results</h2>
-                <div id="overallScore" class="text-5xl font-bold text-blue-600">3/10</div>
-                <div class="mt-4 w-full bg-gray-200 rounded-full h-2.5">
-                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 30%"></div>
-                </div>
+            <div id="resultsSection" class="results-container custom-shadow hidden">
+            <div class="chart-container">
+                <h2 class="text-2xl font-semibold mb-4">Sentiment Analysis</h2>
                 <canvas id="sentimentChart" class="mt-6"></canvas>
+            </div>
+            <div class="chart-container">
+                <h2 class="text-2xl font-semibold mb-4">Key Metrics</h2>
                 <canvas id="metricsChart" class="mt-6"></canvas>
-                <button id="downloadPdf" class="mt-4 w-full bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700">Download Complete Report</button>
+            </div>
+            <button id="downloadPdf" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700">Download Complete Report</button>
             </div>
         </div>
     </main>
