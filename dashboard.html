@@ -12,7 +12,7 @@
         body { font-family: 'Arial', sans-serif; }
         .custom-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
      </style>
-    <!-- Other head content -->
+    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-gray-100">
@@ -47,32 +47,20 @@
                 <button id="analyzeBtn" class="mt-6 w-full bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700 transition duration-300">Analyze</button>
             </div>
 
+            <!-- Results Section -->
             <div id="resultsSection" class="hidden bg-white p-8 custom-shadow rounded-lg">
                 <h2 class="text-3xl font-semibold mb-6 text-gray-800">Analysis Results</h2>
                 
+                <!-- Overall Score -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div class="bg-gray-50 p-6 rounded-lg custom-shadow">
                         <h3 class="text-xl font-semibold mb-4 text-gray-700">Overall Score</h3>
-                        <div class="text-5xl font-bold text-blue-600 mb-2">3/10</div>
+                        <div id="overallScore" class="text-5xl font-bold text-blue-600 mb-2">3/10</div>
                         <div class="w-full bg-gray-200 rounded-full h-2.5">
                             <div class="bg-blue-600 h-2.5 rounded-full" style="width: 30%"></div>
                         </div>
                     </div>
-                    
-                    <div class="bg-gray-50 p-6 rounded-lg custom-shadow">
-                        <h3 class="text-xl font-semibold mb-4 text-gray-700">Sentiment Breakdown (VADER Analysis)</h3>
-                        <div class="aspect-square">
-                            <img src="/api/placeholder/300/300" alt="Sentiment Chart" class="w-full h-full object-contain">
-                        </div>
-                    </div>
-                    
-                    <div class="bg-gray-50 p-6 rounded-lg custom-shadow">
-                        <h3 class="text-xl font-semibold mb-4 text-gray-700">Key Metrics Scores</h3>
-                        <div class="aspect-square">
-                            <img src="/api/placeholder/300/300" alt="Metrics Chart" class="w-full h-full object-contain">
-                        </div>
-                    </div>
-               </div>
+                </div>
 
                 <!-- Sentiment Breakdown Chart -->
                 <div class="mb-8">
@@ -93,34 +81,33 @@
     </main>
 
     <script>
-        <script>
         document.getElementById('analyzeBtn').addEventListener('click', async function(event) {
             event.preventDefault();
-    
+
             // Get files from input fields
             const briefFile = document.getElementById('brief').files[0];
             const scriptFile = document.getElementById('script').files[0];
-    
+
             // Create FormData to send the files
             const formData = new FormData();
             formData.append('brief', briefFile);
             formData.append('script', scriptFile);
-    
+
             try {
                 // Send POST request to /api/analyze-script
                 const response = await fetch('/api/analyze-script', {
                     method: 'POST',
                     body: formData,
                 });
-    
+
                 const data = await response.json();
                 
                 if (response.ok) {
                     document.getElementById('resultsSection').classList.remove('hidden');
-    
-                    // Display overall score received from backend
+
+                    // Display overall score
                     document.getElementById('overallScore').innerText = `${data.alignmentScore}/10`;
-    
+
                     // Render Sentiment Breakdown Chart
                     const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
                     new Chart(sentimentCtx, {
@@ -136,7 +123,7 @@
                             }]
                         }
                     });
-    
+
                     // Render Key Metrics Chart
                     const metricsCtx = document.getElementById('metricsChart').getContext('2d');
                     new Chart(metricsCtx, {
@@ -155,13 +142,12 @@
                 } else {
                     alert(data.error || 'An error occurred during analysis.');
                 }
-    
+
             } catch (error) {
                 console.error('Error:', error);
                 alert('An error occurred while processing your request.');
             }
         });
-
 
         // Download PDF Functionality
         document.getElementById('downloadPdf').addEventListener('click', function() {
