@@ -94,78 +94,88 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function () {
-        let sentimentChartInstance = null;
-        let metricsChartInstance = null;
+    let sentimentChartInstance = null;
+    let metricsChartInstance = null;
 
-        document.getElementById('analyzeBtn').addEventListener('click', async function(event) {
-            if (!document.getElementById('uploadForm').checkValidity()) {
-                document.getElementById('uploadForm').reportValidity();
-                return;
-            }
-            event.preventDefault();
+    document.getElementById('analyzeBtn').addEventListener('click', async function(event) {
+        event.preventDefault();
+        const formData = new FormData(document.getElementById('uploadForm'));
 
-            const briefFile = document.getElementById('brief').files[0];
-            const scriptFile = document.getElementById('script').files[0];
+        try {
+            const response = await fetch('/api/analyze-script', {
+                method: 'POST',
+                body: formData,
+            });
 
-            const formData = new FormData();
-            formData.append('brief', briefFile);
-            formData.append('script', scriptFile);
+            const data = await response.json();
 
-            try {
-                const response = await fetch('/api/analyze-script', {
-                    method: 'POST',
-                    body: formData,
+            if (response.ok) {
+                document.getElementById('resultsSection').classList.remove('hidden');
+                document.getElementById('overallScore').innerText = `${data.alignmentScore}/10`;
+
+                if (sentimentChartInstance) {
+                    sentimentChartInstance.destroy();
+                }
+
+                const sentimentData = data.sentimentBreakdown;
+                const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
+                sentimentChartInstance = new Chart(sentimentCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Positive', 'Negative', 'Neutral', 'Compound'].map((label, index) => `${label} (${sentimentData[label.toLowerCase()]})`),
+                        datasets: [{
+                            label: 'Sentiment Breakdown',
+                            data: [sentimentData.positive, sentimentData.negative, sentimentData.neutral, sentimentData.compound],
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            r: {
+                                ticks: {
+                                    display: false // Hide index
+                                }
+                            }
+                        }
+                    }
                 });
 
-                const data = await response.json();
-
-                if (response.ok) {
-                    document.getElementById('resultsSection').classList.remove('hidden');
-                    document.getElementById('overallScore').innerText = `${data.alignmentScore}/10`;
-
-                    if (sentimentChartInstance) {
-                        sentimentChartInstance.destroy();
-                    }
-
-                    const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
-                    sentimentChartInstance = new Chart(sentimentCtx, {
-                        type: 'radar',
-                        data: {
-                            labels: ['Positive', 'Negative', 'Neutral', 'Compound'],
-                            datasets: [{
-                                label: 'Sentiment Breakdown',
-                                data: [data.sentimentBreakdown.positive, data.sentimentBreakdown.negative, data.sentimentBreakdown.neutral, data.sentimentBreakdown.compound],
-                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                borderColor: 'rgba(54, 162, 235, 1)',
-                                borderWidth: 1
-                            }]
-                        }
-                    });
-
-                    if (metricsChartInstance) {
-                        metricsChartInstance.destroy();
-                    }
-
-                    const metricsCtx = document.getElementById('metricsChart').getContext('2d');
-                    metricsChartInstance = new Chart(metricsCtx, {
-                        type: 'radar',
-                        data: {
-                            labels: ['Clarity', 'Relevance', 'Engagement', 'Persuasiveness', 'Creativity', 'Consistency', 'Emotional Impact'],
-                            datasets: [{
-                                label: 'Key Metrics Scores',
-                                data: [data.keyMetrics.clarity, data.keyMetrics.relevance, data.keyMetrics.engagement, data.keyMetrics.persuasiveness, data.keyMetrics.creativity, data.keyMetrics.consistency, data.keyMetrics.emotionalImpact],
-                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                borderColor: 'rgba(255, 99, 132, 1)',
-                                borderWidth: 1
-                            }]
-                        }
-                    });
-                } else {
-                    alert(data.error || 'An error occurred during analysis.');
+                if (metricsChartInstance) {
+                    metricsChartInstance.destroy();
                 }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred while processing your request.');
+
+                const metricsData = data.keyMetrics;
+                const metricsCtx = document.getElementById('metricsChart').getContext('2d');
+                metricsChartInstance = new Chart(metricsCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: Object.keys(metricsData).map(key => `${key} (${metricsData[key]})`),
+                        datasets: [{
+                            label: 'Key Metrics Scores',
+                            data: Object.values(metricsData),
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            r: {
+                                ticks: {
+                                    display: false // Hide index
+                                }
+                            }
+                        }
+                    }
+                });
+            } else {
+                alert(data.error || 'An error occurred during analysis.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while processing your request.');
             }
         });
 
