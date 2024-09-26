@@ -37,10 +37,6 @@
             padding: 20px;
             flex: 1;
         }
-        .upload-form {
-            max-width: 50%;
-            margin: auto;
-        }
         .score-box {
             display: flex;
             align-items: center;
@@ -55,11 +51,33 @@
             font-weight: bold;
             color: #2a4365; /* Navy blue */
         }
-        
         .score-box span {
             margin-right: 10px;
             font-size: 20px;
             color: #718096; /* Gray */
+        }
+        .main-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 20px;
+        }
+        .upload-form {
+            width: 30%;  /* Smaller width for the upload section */
+            padding: 20px;
+            margin: 20px 20px 20px 0;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .results-container {
+            flex-grow: 1;  /* Allows the results container to fill the rest of the space */
+            padding: 20px;
+            background: #fff;
+            margin: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         canvas {
             width: 400px !important;
@@ -82,41 +100,42 @@
             </div>
         </div>
     </nav>
-
     <main class="pt-20 pb-12">
-        <div class="max-w-4xl mx-auto px-4">
+        <div class="max-w-7xl mx-auto px-4">
             <h1 class="text-3xl font-bold text-center mb-10">Upload Brief & Script for Analysis</h1>
-            <div class="bg-white p-6 rounded-lg shadow custom-shadow upload-form">
-                <form id="uploadForm" class="space-y-6">
-                    <div>
-                        <label for="brief" class="text-sm font-medium text-gray-700">Upload Brief</label>
-                        <input type="file" id="brief" name="brief" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+            <div class="main-container">
+                <div class="upload-form">
+                    <form id="uploadForm" class="space-y-6">
+                        <div>
+                            <label for="brief" class="text-sm font-medium text-gray-700">Upload Brief</label>
+                            <input type="file" id="brief" name="brief" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                        </div>
+                        <div>
+                            <label for="script" class="text-sm font-medium text-gray-700">Upload Script</label>
+                            <input type="file" id="script" name="script" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                        </div>
+                        <button type="submit" id="analyzeBtn" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Analyze</button>
+                    </form>
+                </div>
+                <section id="resultsSection" class="results-container custom-shadow hidden">
+                    <h2 class="text-4xl font-bold">Analysis Results</h2>
+                    <div class="score-box">
+                        <span>Overall Score:</span>
+                        <div id="overallScore" class="text-5xl font-bold text-blue-600">10/10</div>
                     </div>
-                    <div>
-                        <label for="script" class="text-sm font-medium text-gray-700">Upload Script</label>
-                        <input type="file" id="script" name="script" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                    <div class="chart-container">
+                        <div class="chart-box">
+                            <h3 class="text-2xl font-semibold mb-4">Sentiment Analysis</h3>
+                            <canvas id="sentimentChart" class="mt-6"></canvas>
+                        </div>
+                        <div class="chart-box">
+                            <h3 class="text-2xl font-semibold mb-4">Key Metrics</h3>
+                            <canvas id="metricsChart" class="mt-6"></canvas>
+                        </div>
                     </div>
-                    <button type="submit" id="analyzeBtn" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Analyze</button>
-                </form>
+                    <button id="downloadPdf" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700">Download Complete Report</button>
+                </section>
             </div>
-            <section id="resultsSection" class="results-container custom-shadow hidden">
-                <h2 class="text-4xl font-bold text-center">Analysis Results</h2>
-                <div class="score-box">
-                    <span>Overall Score:</span> <!-- Label for the score -->
-                    <div id="overallScore" class="text-5xl font-bold text-blue-600">10/10</div>
-                </div>
-                <div class="chart-container">
-                    <div class="chart-box">
-                        <h3 class="text-2xl font-semibold mb-4">Sentiment Analysis</h3>
-                        <canvas id="sentimentChart" class="mt-6"></canvas>
-                    </div>
-                    <div class="chart-box">
-                        <h3 class="text-2xl font-semibold mb-4">Key Metrics</h3>
-                        <canvas id="metricsChart" class="mt-6"></canvas>
-                    </div>
-                </div>
-                <button id="downloadPdf" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700">Download Complete Report</button>
-            </section>
         </div>
     </main>
 
