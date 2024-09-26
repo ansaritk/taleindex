@@ -17,19 +17,25 @@
         }
         .results-container {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            align-items: center;
             padding: 20px;
         }
         .chart-container {
-            flex: 1; /* Makes each chart container take equal space */
-            margin: 10px;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 20px;
         }
         .custom-shadow {
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+        }
+        .chart-box {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 20px;
+            flex: 1;
         }
     </style>
     <!-- Chart.js CDN -->
@@ -66,14 +72,16 @@
                 </form>
             </div>
             <div id="resultsSection" class="results-container custom-shadow hidden">
-                <div class="text-5xl font-bold text-blue-600" id="overallScore">0/10</div>
+                <div class="text-5xl font-bold text-blue-600" id="overallScore">10/10</div>
                 <div class="chart-container">
-                    <h2 class="text-2xl font-semibold mb-4">Sentiment Analysis</h2>
-                    <canvas id="sentimentChart" class="mt-6"></canvas>
-                </div>
-                <div class="chart-container">
-                    <h2 class="text-2xl font-semibold mb-4">Key Metrics</h2>
-                    <canvas id="metricsChart" class="mt-6"></canvas>
+                    <div class="chart-box">
+                        <h2 class="text-2xl font-semibold mb-4">Sentiment Analysis</h2>
+                        <canvas id="sentimentChart" class="mt-6"></canvas>
+                    </div>
+                    <div class="chart-box">
+                        <h2 class="text-2xl font-semibold mb-4">Key Metrics</h2>
+                        <canvas id="metricsChart" class="mt-6"></canvas>
+                    </div>
                 </div>
                 <button id="downloadPdf" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700">Download Complete Report</button>
             </div>
