@@ -136,26 +136,38 @@
                             scales: {
                                 r: {
                                     angleLines: {
-                                        display: false
+                                        display: false  // Hides the radial lines
                                     },
                                     grid: {
-                                        display: false
+                                        display: false  // Hides the circular grid lines (the web)
                                     },
                                     ticks: {
-                                        display: false,
-                                        beginAtZero: true
+                                        display: true,  // Shows the tick labels (the axis markers)
+                                        beginAtZero: true,  // Ensures the scale starts at zero
+                                        color: 'rgba(0, 0, 0, 0.5)',  // Adjusts the color of the tick labels if needed
+                                        backdropColor: 'transparent',  // Ensures there is no background color behind the tick labels
+                                        z: 5,  // Ensures ticks are visible on top of the chart area, adjust z-index if not visible
+                                        maxTicksLimit: 5  // Limits the number of ticks displayed
                                     },
                                     pointLabels: {
-                                        display: true,
-                                        callback: function(label, index, labels) {
-                                            return label;
+                                        display: true,  // Ensures labels are displayed
+                                        font: {
+                                            size: 14  // Adjusts the font size of labels if needed
                                         }
                                     }
                                 }
                             },
+                            elements: {
+                                line: {
+                                    borderWidth: 3  // Adjusts the thickness of the radar lines connecting data points
+                                }
+                            },
                             plugins: {
                                 legend: {
-                                    display: true
+                                    display: true  // Adjust based on whether you want to display the legend
+                                },
+                                tooltip: {
+                                    enabled: true  // Enables tooltips on hover
                                 }
                             }
                         }
@@ -183,29 +195,42 @@
                             scales: {
                                 r: {
                                     angleLines: {
-                                        display: false
+                                        display: false  // Hides the radial lines
                                     },
                                     grid: {
-                                        display: false
+                                        display: false  // Hides the circular grid lines (the web)
                                     },
                                     ticks: {
-                                        display: false,
-                                        beginAtZero: true
+                                        display: true,  // Shows the tick labels (the axis markers)
+                                        beginAtZero: true,  // Ensures the scale starts at zero
+                                        color: 'rgba(0, 0, 0, 0.5)',  // Adjusts the color of the tick labels if needed
+                                        backdropColor: 'transparent',  // Ensures there is no background color behind the tick labels
+                                        z: 5,  // Ensures ticks are visible on top of the chart area, adjust z-index if not visible
+                                        maxTicksLimit: 5  // Limits the number of ticks displayed
                                     },
                                     pointLabels: {
-                                        display: true,
-                                        callback: function(label, index, labels) {
-                                            return label;
+                                        display: true,  // Ensures labels are displayed
+                                        font: {
+                                            size: 14  // Adjusts the font size of labels if needed
                                         }
                                     }
                                 }
                             },
+                            elements: {
+                                line: {
+                                    borderWidth: 3  // Adjusts the thickness of the radar lines connecting data points
+                                }
+                            },
                             plugins: {
                                 legend: {
-                                    display: true
+                                    display: true  // Adjust based on whether you want to display the legend
+                                },
+                                tooltip: {
+                                    enabled: true  // Enables tooltips on hover
                                 }
                             }
                         }
+
                     });
                 } else {
                     alert(data.error || 'An error occurred during analysis.');
