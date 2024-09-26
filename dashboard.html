@@ -146,8 +146,21 @@
 
         document.getElementById('analyzeBtn').addEventListener('click', async function(event) {
             event.preventDefault();
-            const formData = new FormData(document.getElementById('uploadForm'));
+            const briefInput = document.getElementById('brief');
+            const scriptInput = document.getElementById('script');
+            
+            // Validate file inputs
+            if (!briefInput.checkValidity()) {
+                briefInput.reportValidity();
+                return;  // Stop if the brief file is not valid
+            }
+            if (!scriptInput.checkValidity()) {
+                scriptInput.reportValidity();
+                return;  // Stop if the script file is not valid
+            }
 
+            const formData = new FormData(document.getElementById('uploadForm'));
+            
             try {
                 const response = await fetch('/api/analyze-script', {
                     method: 'POST',
